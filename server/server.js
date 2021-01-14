@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 app.use(require('./routes/user'));
 
-mongoose.connect('mongodb://localhost:27017/cafe', //uri
+mongoose.connect(process.env.URLDB, //uri
     { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true }, //options
     (err, res) => { //callback
         if (err) throw err;
