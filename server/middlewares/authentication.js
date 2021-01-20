@@ -39,9 +39,9 @@ let verifyRole_Admin = (req, res, next) => {
             }
         })
     }
-}
+};
 
 module.exports = {
     verifyToken,
     verifyRole_Admin
-}
+};
