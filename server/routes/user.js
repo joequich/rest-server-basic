@@ -16,8 +16,8 @@ app.get('/user', verifyToken, function (req, res) {
         .skip(from)
         .limit(limit)
         .exec((err, users) => {
-            if( err ) {
-                return res.status(400).json({
+            if (err) {
+                return res.status(500).json({
                     ok: false,
                     err
                 });
@@ -40,19 +40,19 @@ app.post('/user', [verifyToken, verifyRole_Admin], function (req, res) {
     let user = new User({
         name: body.name,
         email: body.email,
-        password: bcrypt.hashSync( body.password, 10),
+        password: bcrypt.hashSync(body.password, 10),
         role: body.role
     });
 
     user.save((err, userDB) => {
-        if( err ) {
-            return res.status(400).json({
+        if (err) {
+            return res.status(500).json({
                 ok: false,
                 err
             });
         }
 
-        res.json({
+        res.status(201).json({
             ok: true,
             user: userDB
         });
@@ -61,10 +61,17 @@ app.post('/user', [verifyToken, verifyRole_Admin], function (req, res) {
 
 app.put('/user/:id', [verifyToken, verifyRole_Admin], function (req, res) {
     let id = req.params.id;
-    let body = _.pick(req.body, ['name','img','email','role','status'])
+    let body = _.pick(req.body, ['name', 'img', 'email', 'role', 'status']);
 
-    User.findByIdAndUpdate( id, body, {new: true, runValidators: true},(err, userDB) => {
+    User.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, userDB) => {
         if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        if (!userDB) {
             return res.status(400).json({
                 ok: false,
                 err
@@ -80,10 +87,17 @@ app.put('/user/:id', [verifyToken, verifyRole_Admin], function (req, res) {
 
 app.delete('/user/:id', [verifyToken, verifyRole_Admin], function (req, res) {
     let id = req.params.id;
-    let status = { status: false }
+    let status = { status: false };
 
-    User.findByIdAndUpdate( id, status, {new: true},(err, userDeleted) => {
+    User.findByIdAndUpdate(id, status, { new: true }, (err, userDeleted) => {
         if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        if (!userDeleted) {
             return res.status(400).json({
                 ok: false,
                 err
