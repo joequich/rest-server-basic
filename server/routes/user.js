@@ -89,7 +89,7 @@ app.delete('/user/:id', [verifyToken, verifyRole_Admin], function (req, res) {
     let id = req.params.id;
     let status = { status: false };
 
-    User.findByIdAndUpdate(id, status, { new: true }, (err, userDeleted) => {
+    User.findByIdAndUpdate(id, status, { new: true }, (err, deletedUser) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -97,7 +97,7 @@ app.delete('/user/:id', [verifyToken, verifyRole_Admin], function (req, res) {
             });
         }
 
-        if (!userDeleted) {
+        if (!deletedUser) {
             return res.status(400).json({
                 ok: false,
                 err
@@ -106,7 +106,7 @@ app.delete('/user/:id', [verifyToken, verifyRole_Admin], function (req, res) {
 
         res.json({
             ok: true,
-            user: userDeleted
+            user: deletedUser
         });
     });
 

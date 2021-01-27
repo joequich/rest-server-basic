@@ -167,7 +167,7 @@ app.delete('/product/:id', verifyToken, function (req, res) {
     let id = req.params.id;
     let available = { available: false };
 
-    Product.findByIdAndUpdate(id, available, { new: true }, (err, productDeleted) => {
+    Product.findByIdAndUpdate(id, available, { new: true }, (err, deletdProduct) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -175,7 +175,7 @@ app.delete('/product/:id', verifyToken, function (req, res) {
             });
         }
 
-        if (!productDeleted) {
+        if (!deletdProduct) {
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -186,7 +186,7 @@ app.delete('/product/:id', verifyToken, function (req, res) {
 
         res.json({
             ok: true,
-            product: productDeleted,
+            product: deletdProduct,
             message: 'Product deleted'
         });
     });
