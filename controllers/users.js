@@ -1,5 +1,5 @@
 const { request, response } = require('express');
-const bcryptjs = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const _ = require('lodash');
 
 const User = require('../models/user');
@@ -43,11 +43,22 @@ const usersPut = (req, res = response) => {
 }
 
 const usersPost = async(req = request, res = response) => {
-    const {name, email, password, role} = req.body;
 
+    const {name, email, password, role} = req.body;
     const user = new User({ name, email, password, role });
-    const salt = bcryptjs.genSaltSync();
-    user.password = bcryptjs.hashSync(password, salt);
+    
+    // verify if the email exists
+    const existEmail = await User.findOne({ email });
+    
+    if(existEmail) {
+        return res.status(400).json({
+            message: 'Email already exists'
+        });
+    }
+    
+    // encrypt password
+    const salt = bcrypt.genSaltSync();
+    user.password = bcrypt.hashSync(password, salt);
 
     // await user.save((err, userDB) => {
     //     if (err) {
@@ -62,7 +73,7 @@ const usersPost = async(req = request, res = response) => {
     // });
     await user.save();
 
-    res.json({
+    res.status(201).json({
         user
     });
 }
