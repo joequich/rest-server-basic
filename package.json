@@ -2,24 +2,26 @@
   "name": "rest-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/server.js",
-    "nodemon": "nodemon server/server.js"
+    "start": "node app.js",
+    "nodemon": "nodemon app.js"
   },
   "author": "Joseph Quispe",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
-    "google-auth-library": "^6.1.4",
+    "google-auth-library": "^6.1.6",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.11",
-    "mongoose-unique-validator": "^2.0.3",
-    "underscore": "^1.12.0"
+    "lodash": "^4.17.21",
+    "mongoose": "^5.11.15",
+    "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
