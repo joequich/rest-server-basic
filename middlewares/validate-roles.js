@@ -1,7 +1,6 @@
 const { request, response } = require("express");
 
 const isAdminRole = (req = request, res = response, next) => {
-
     if(!req.user) {
         return res.status(500).json({
             msg: 'It is required to verify the role is valid token first.'
@@ -14,9 +13,29 @@ const isAdminRole = (req = request, res = response, next) => {
             msg: `${name} is not administrator - Cannot do this.`
         });
     }
+
     next();
 }
 
+const hasRole = (...roles) => {
+    return (req = request, res = response, next) => {
+        if(!req.user) {
+            return res.status(500).json({
+                msg: 'It is required to verify the role is valid token first.'
+            });
+        }
+
+        if(!roles.includes(req.user.role)) {
+            return res.status(401).json({
+                msg: `The service requires one of these roles ${roles}`
+            });
+        }
+
+        next();
+    }
+}
+
 module.exports = {
-    isAdminRole
+    isAdminRole,
+    hasRole
 }
