@@ -8,7 +8,7 @@ const login = async(req = request, res = response) => {
     const { email, password } = req.body;
 
     try {
-        //verify if email exist
+        // verify if email exist
         const user = await User.findOne({ email });
         if(!user) {
             return res.status(400).json({
@@ -16,14 +16,14 @@ const login = async(req = request, res = response) => {
             });
         }
 
-        //if user is active
+        // if user is active
         if(!user.status) {
             return res.status(400).json({
-                msg: 'User / Password arent\' corrects - status: false'
+                msg: 'User / Password arent\' corrects'
             });
         }
 
-        //verify password
+        // verify password
         const validPassword = bcrypt.compareSync(password, user.password);
         if(!validPassword) {
             return res.status(400).json({
@@ -31,7 +31,7 @@ const login = async(req = request, res = response) => {
             });
         }
 
-        //generate JWT
+        // generate JWT
         const token = await generateJWT(user.id);
         
         res.json({
