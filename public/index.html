@@ -9,22 +9,27 @@
 </head>
 <body>
     <!-- <img src="http://localhost:3000/image/users/5ff3e6bdeef8940ff82b1ce1-309.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InJvbGUiOiJBRE1JTl9ST0xFIiwic3RhdHVzIjp0cnVlLCJnb29nbGUiOmZhbHNlLCJfaWQiOiI1ZmYzZTZiZGVlZjg5NDBmZjgyYjFjZTEiLCJuYW1lIjoiVGVzdDEiLCJlbWFpbCI6InRlc3QxQGdtYWlsLmNvbSIsIl9fdiI6MH0sImlhdCI6MTYxMTc0OTYwNCwiZXhwIjoxNjExOTIyNDA0fQ.q7xqd8NATg4K5RuXd_FoyEQHMLnp12LWfvUFyQ0EnWA" alt=""> -->
-
+    <h1>GOOGLE SIGN-IN</h1>
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <a href="#" onclick="signOut();">Sign out</a>
     
 <script>
+    console.log(window.location.hostname.includes('localhost'));
+    var url = (window.location.hostname.includes('localhost')) ? 'http://localhost:8080/api/auth/google' : 'https://restserver-jq.herokuapp.com/api/auth/google';
+
     function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
         var id_token = googleUser.getAuthResponse().id_token;
+        const data = { id_token };
         
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/googlesignin');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-          console.log('Signed in Google');
-        };
-        xhr.send('idtoken=' + id_token);
+        fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(resp => resp.json())
+        .then(data => console.log('Server says', data))
+        .catch(console.log);
     }
 
     function signOut() {
