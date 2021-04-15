@@ -6,9 +6,9 @@ const isAdminRole = (req = request, res = response, next) => {
             msg: 'It is required to verify the role is valid token first.'
         });
     }
-    const { rol, name } = req.user;
+    const { role, name } = req.user;
 
-    if(rol !== 'ADMIN_ROLE') {
+    if(role !== 'ADMIN_ROLE') {
         return res.status(401).json({
             msg: `${name} is not administrator - Cannot do this.`
         });
