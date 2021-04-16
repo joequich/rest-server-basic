@@ -47,9 +47,7 @@ const createCategory = async(req = request, res = response) => {
         user: req.user._id
     }
 
-    console.log(data);
     const category = new Category(data);
-    console.log(category);
     // save DB
     await category.save();
 
