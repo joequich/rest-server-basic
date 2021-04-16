@@ -9,7 +9,7 @@ const getCategories = async(req = request, res = response) => {
     const [total, categories] = await Promise.all([
         Category.countDocuments(query),
         Category.find(query)
-        .populate('user')
+        .populate('user', 'name')
         .skip(Number(from))
         .limit(Number(limit))
     ]);
@@ -23,13 +23,7 @@ const getCategories = async(req = request, res = response) => {
 // getCategory - populate {}
 const getCategory = async(req = request, res = response) => {
     const { id } = req.params;
-    const category = await Category.findById(id).populate('user');
-
-    if(!category) {
-        return res.status(401).json({
-            msg: 'Category not found'
-        });
-    }
+    const category = await Category.findById(id).populate('user', 'name');
 
     res.json({
         category
@@ -65,15 +59,12 @@ const createCategory = async(req = request, res = response) => {
 // updateCategory
 const updateCategory = async(req = request, res = response) => {
     const { id } = req.params;
-    const { name } = req.body;
+    const { status, user, ...data} = req.body;
 
-    const category = await Category.findByIdAndUpdate(id, { name: name.toUpperCase() });
+    data.name = data.name.toUpperCase();
+    data.user = req.user._id;
 
-    if(!category) {
-        return res.status(401).json({
-            msg: 'Category not found'
-        });
-    }
+    const category = await Category.findByIdAndUpdate(id, data);
 
     res.json({
         category
@@ -84,12 +75,6 @@ const updateCategory = async(req = request, res = response) => {
 const deleteCategory = async(req = request, res = response) => {
     const { id } = req.params;
     const category = await Category.findByIdAndUpdate(id, { status: false });
-
-    if(!category) {
-        return res.status(401).json({
-            msg: 'Category not found'
-        });
-    }
 
     res.json({
         category
