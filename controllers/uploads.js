@@ -6,15 +6,6 @@ const { request, response } = require("express");
 const { uploadFile } = require("../helpers");
 const { User, Product } = require('../models');
 
-
-// const { CLOUDINARY_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
-
-// cloudinary.config({ 
-//     cloud_name: CLOUDINARY_NAME, 
-//     api_key: CLOUDINARY_API_KEY, 
-//     api_secret: CLOUDINARY_API_SECRET
-// });
-
 const loadFile = async(req = request, res = response) => {
     try {
         const name = await uploadFile(req.files, undefined, 'imgs');
