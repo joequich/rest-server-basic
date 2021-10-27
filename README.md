@@ -2,7 +2,7 @@
 
 Este proyecto es parte del curso NodeJs desde Cero - Udemy.
 
-##Caracteristicas
+## Caracteristicas
 
 - Autenticacion usando Json Web Token y Login con Google
 - Uso de base de datos MongoDB
